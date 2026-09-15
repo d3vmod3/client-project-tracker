@@ -1,8 +1,8 @@
-import { Head, Link } from "@inertiajs/react";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { EditIcon, TrashIcon } from "lucide-react";
-import { toast } from "sonner";
+import { Head, Link } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { EditIcon, TrashIcon } from 'lucide-react';
+import { toast } from 'sonner';
 import {
     Dialog,
     DialogContent,
@@ -10,10 +10,10 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
-type ProjectStatus = "planning" | "in_progress" | "on_hold" | "completed";
-type ProjectPriority = "low" | "medium" | "high";
+type ProjectStatus = 'planning' | 'in_progress' | 'on_hold' | 'completed';
+type ProjectPriority = 'low' | 'medium' | 'high';
 
 interface Project {
     id: number;
@@ -29,8 +29,8 @@ interface Project {
 export default function Index() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [search, setSearch] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
 
     const [projectToDelete, setProjectToDelete] = useState<Project | null>(
         null,
@@ -56,7 +56,7 @@ export default function Index() {
                 setProjects(data.data);
             })
             .catch((error) => {
-                console.error("Failed to fetch projects:", error);
+                console.error('Failed to fetch projects:', error);
             })
             .finally(() => {
                 setLoading(false);
@@ -74,9 +74,9 @@ export default function Index() {
             const response = await fetch(
                 `/api/projects/${projectToDelete.id}`,
                 {
-                    method: "DELETE",
+                    method: 'DELETE',
                     headers: {
-                        Accept: "application/json",
+                        Accept: 'application/json',
                     },
                 },
             );
@@ -84,7 +84,7 @@ export default function Index() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Failed to delete project.");
+                throw new Error(data.message || 'Failed to delete project.');
             }
 
             setProjects((current) =>
@@ -93,16 +93,16 @@ export default function Index() {
 
             setProjectToDelete(null);
 
-            toast.success("Project deleted successfully!", {
+            toast.success('Project deleted successfully!', {
                 duration: 3000,
-                position: "top-center",
+                position: 'top-center',
             });
         } catch (error) {
-            console.error("Failed to delete project:", error);
+            console.error('Failed to delete project:', error);
 
-            toast.error("Failed to delete project.", {
+            toast.error('Failed to delete project.', {
                 duration: 3000,
-                position: "top-center",
+                position: 'top-center',
             });
         } finally {
             setDeleting(false);
@@ -118,14 +118,14 @@ export default function Index() {
                     <div>
                         <h1 className="text-2xl font-semibold">Projects</h1>
 
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-muted-foreground text-sm">
                             Manage and track client projects.
                         </p>
                     </div>
 
                     <Link
                         href="/projects/create"
-                        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium"
                     >
                         Add Project
                     </Link>
@@ -145,7 +145,7 @@ export default function Index() {
                 ) : (
                     <div className="overflow-hidden rounded-lg border">
                         <table className="w-full">
-                            <thead className="border-b bg-muted/50">
+                            <thead className="bg-muted/50 border-b">
                                 <tr>
                                     <th className="px-4 py-3 text-left text-sm font-medium">
                                         Project
@@ -174,7 +174,7 @@ export default function Index() {
                                         key={project.id}
                                         className="border-b last:border-0 hover:bg-gray-50"
                                     >
-                                        <td className="group px-4 py-3 flex items-center justify-between">
+                                        <td className="group flex items-center justify-between px-4 py-3">
                                             {project.projectName}
                                             <div className="flex items-center space-x-4">
                                                 <Link
@@ -185,7 +185,7 @@ export default function Index() {
                                                 </Link>
                                                 <button
                                                     type="button"
-                                                    className="opacity-0 transition-opacity group-hover:opacity-100 text-destructive cursor-pointer"
+                                                    className="text-destructive cursor-pointer opacity-0 transition-opacity group-hover:opacity-100"
                                                     onClick={() =>
                                                         setProjectToDelete(
                                                             project,
@@ -234,7 +234,7 @@ export default function Index() {
                             <DialogTitle>Delete project?</DialogTitle>
 
                             <DialogDescription>
-                                Are you sure you want to delete{" "}
+                                Are you sure you want to delete{' '}
                                 <strong>{projectToDelete?.projectName}</strong>?
                                 This action cannot be undone.
                             </DialogDescription>
@@ -254,7 +254,7 @@ export default function Index() {
                                 onClick={handleDelete}
                                 disabled={deleting}
                             >
-                                {deleting ? "Deleting..." : "Delete"}
+                                {deleting ? 'Deleting...' : 'Delete'}
                             </Button>
                         </DialogFooter>
                     </DialogContent>

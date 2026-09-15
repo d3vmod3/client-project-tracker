@@ -1,9 +1,9 @@
-import { Head, Link } from "@inertiajs/react";
-import { FormEvent, useState } from "react";
-import { toast } from "sonner";
+import { Head, Link } from '@inertiajs/react';
+import { FormEvent, useState } from 'react';
+import { toast } from 'sonner';
 
-type ProjectStatus = "planning" | "in_progress" | "on_hold" | "completed";
-type ProjectPriority = "low" | "medium" | "high";
+type ProjectStatus = 'planning' | 'in_progress' | 'on_hold' | 'completed';
+type ProjectPriority = 'low' | 'medium' | 'high';
 
 export default function Create() {
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -12,32 +12,32 @@ export default function Create() {
         const newErrors: Record<string, string> = {};
 
         if (!form.clientName.trim()) {
-            newErrors.clientName = "Client name is required.";
+            newErrors.clientName = 'Client name is required.';
         }
 
         if (!form.projectName.trim()) {
-            newErrors.projectName = "Project name is required.";
+            newErrors.projectName = 'Project name is required.';
         }
 
         if (!form.status) {
-            newErrors.status = "Status is required.";
+            newErrors.status = 'Status is required.';
         }
 
         if (!form.priority) {
-            newErrors.priority = "Priority is required.";
+            newErrors.priority = 'Priority is required.';
         }
 
         if (!form.startDate) {
-            newErrors.startDate = "Start date is required.";
+            newErrors.startDate = 'Start date is required.';
         }
 
         if (!form.dueDate) {
-            newErrors.dueDate = "Due date is required.";
+            newErrors.dueDate = 'Due date is required.';
         }
 
         if (form.startDate && form.dueDate && form.dueDate < form.startDate) {
             newErrors.dueDate =
-                "Due date cannot be earlier than the start date.";
+                'Due date cannot be earlier than the start date.';
         }
 
         setErrors(newErrors);
@@ -45,13 +45,13 @@ export default function Create() {
         return Object.keys(newErrors).length === 0;
     };
     const [form, setForm] = useState({
-        clientName: "",
-        projectName: "",
-        description: "",
-        status: "planning" as ProjectStatus,
-        priority: "medium" as ProjectPriority,
-        startDate: "",
-        dueDate: "",
+        clientName: '',
+        projectName: '',
+        description: '',
+        status: 'planning' as ProjectStatus,
+        priority: 'medium' as ProjectPriority,
+        startDate: '',
+        dueDate: '',
     });
 
     const handleChange = (field: keyof typeof form, value: string) => {
@@ -69,11 +69,11 @@ export default function Create() {
         setSubmitting(true);
         console.log(form);
         try {
-            const response = await fetch("/api/projects", {
-                method: "POST",
+            const response = await fetch('/api/projects', {
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
                 },
                 body: JSON.stringify({
                     client_name: form.clientName,
@@ -102,30 +102,30 @@ export default function Create() {
                     return;
                 }
 
-                throw new Error(data.message || "Failed to create project.");
+                throw new Error(data.message || 'Failed to create project.');
             }
 
-            toast.success("Action completed successfully!", {
+            toast.success('Action completed successfully!', {
                 duration: 3000,
-                position: "top-center",
+                position: 'top-center',
             });
 
             setForm({
-                clientName: "",
-                projectName: "",
-                description: "",
-                status: "planning",
-                priority: "medium",
-                startDate: "",
-                dueDate: "",
+                clientName: '',
+                projectName: '',
+                description: '',
+                status: 'planning',
+                priority: 'medium',
+                startDate: '',
+                dueDate: '',
             });
 
             setErrors({});
         } catch (error) {
-            console.error("Failed to create project:", error);
-            toast.error("Failed to create project!", {
+            console.error('Failed to create project:', error);
+            toast.error('Failed to create project!', {
                 duration: 3000,
-                position: "top-center",
+                position: 'top-center',
             });
         } finally {
             setSubmitting(false);
@@ -140,7 +140,7 @@ export default function Create() {
                 <div className="mb-6">
                     <h1 className="text-2xl font-semibold">Add Project</h1>
 
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                         Create a new client project.
                     </p>
                 </div>
@@ -160,13 +160,13 @@ export default function Create() {
                             type="text"
                             value={form.clientName}
                             onChange={(event) =>
-                                handleChange("clientName", event.target.value)
+                                handleChange('clientName', event.target.value)
                             }
                             className="w-full rounded-md border px-3 py-2 text-sm"
                             placeholder="Enter client name"
                         />
                         {errors.clientName && (
-                            <p className="text-sm text-destructive">
+                            <p className="text-destructive text-sm">
                                 {errors.clientName}
                             </p>
                         )}
@@ -186,13 +186,13 @@ export default function Create() {
                             type="text"
                             value={form.projectName}
                             onChange={(event) =>
-                                handleChange("projectName", event.target.value)
+                                handleChange('projectName', event.target.value)
                             }
                             className="w-full rounded-md border px-3 py-2 text-sm"
                             placeholder="Enter project name"
                         />
                         {errors.projectName && (
-                            <p className="text-sm text-destructive">
+                            <p className="text-destructive text-sm">
                                 {errors.projectName}
                             </p>
                         )}
@@ -211,13 +211,13 @@ export default function Create() {
                             id="description"
                             value={form.description}
                             onChange={(event) =>
-                                handleChange("description", event.target.value)
+                                handleChange('description', event.target.value)
                             }
                             className="min-h-32 w-full rounded-md border px-3 py-2 text-sm"
                             placeholder="Enter project description"
                         />
                         {errors.description && (
-                            <p className="text-sm text-destructive">
+                            <p className="text-destructive text-sm">
                                 {errors.description}
                             </p>
                         )}
@@ -237,7 +237,7 @@ export default function Create() {
                                 id="status"
                                 value={form.status}
                                 onChange={(event) =>
-                                    handleChange("status", event.target.value)
+                                    handleChange('status', event.target.value)
                                 }
                                 className="w-full rounded-md border px-3 py-2 text-sm"
                             >
@@ -250,7 +250,7 @@ export default function Create() {
                                 <option value="completed">Completed</option>
                             </select>
                             {errors.status && (
-                                <p className="text-sm text-destructive">
+                                <p className="text-destructive text-sm">
                                     {errors.status}
                                 </p>
                             )}
@@ -268,7 +268,7 @@ export default function Create() {
                                 id="priority"
                                 value={form.priority}
                                 onChange={(event) =>
-                                    handleChange("priority", event.target.value)
+                                    handleChange('priority', event.target.value)
                                 }
                                 className="w-full rounded-md border px-3 py-2 text-sm"
                             >
@@ -277,7 +277,7 @@ export default function Create() {
                                 <option value="high">High</option>
                             </select>
                             {errors.priority && (
-                                <p className="text-sm text-destructive">
+                                <p className="text-destructive text-sm">
                                     {errors.priority}
                                 </p>
                             )}
@@ -300,14 +300,14 @@ export default function Create() {
                                 value={form.startDate}
                                 onChange={(event) =>
                                     handleChange(
-                                        "startDate",
+                                        'startDate',
                                         event.target.value,
                                     )
                                 }
                                 className="w-full rounded-md border px-3 py-2 text-sm"
                             />
                             {errors.startDate && (
-                                <p className="text-sm text-destructive">
+                                <p className="text-destructive text-sm">
                                     {errors.startDate}
                                 </p>
                             )}
@@ -326,12 +326,12 @@ export default function Create() {
                                 type="date"
                                 value={form.dueDate}
                                 onChange={(event) =>
-                                    handleChange("dueDate", event.target.value)
+                                    handleChange('dueDate', event.target.value)
                                 }
                                 className="w-full rounded-md border px-3 py-2 text-sm"
                             />
                             {errors.dueDate && (
-                                <p className="text-sm text-destructive">
+                                <p className="text-destructive text-sm">
                                     {errors.dueDate}
                                 </p>
                             )}
@@ -349,7 +349,7 @@ export default function Create() {
 
                         <button
                             type="submit"
-                            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium"
                         >
                             Create Project
                         </button>

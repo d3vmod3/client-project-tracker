@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link } from '@inertiajs/react';
 import {
     BookOpen,
     Folder,
@@ -6,11 +6,11 @@ import {
     LayoutGrid,
     List,
     Trash,
-} from "lucide-react";
-import AppLogo from "@/components/app-logo";
-import { NavFooter } from "@/components/nav-footer";
-import { NavMain } from "@/components/nav-main";
-import { NavUser } from "@/components/nav-user";
+} from 'lucide-react';
+import AppLogo from '@/components/app-logo';
+import { NavFooter } from '@/components/nav-footer';
+import { NavMain } from '@/components/nav-main';
+import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
     SidebarContent,
@@ -19,9 +19,9 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import { dashboard } from "@/routes";
-import type { NavItem } from "@/types";
+} from '@/components/ui/sidebar';
+import { dashboard } from '@/routes';
+import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     // {
@@ -30,21 +30,21 @@ const mainNavItems: NavItem[] = [
     //     icon: LayoutGrid,
     // },
     {
-        title: "Projects",
-        href: "/projects",
+        title: 'Projects',
+        href: '/projects',
         icon: Folder,
     },
 ];
 
 const footerNavItems: NavItem[] = [
     {
-        title: "Repository",
-        href: "https://github.com/laravel/react-starter-kit",
+        title: 'Repository',
+        href: 'https://github.com/laravel/react-starter-kit',
         icon: FolderGit2,
     },
     {
-        title: "Documentation",
-        href: "https://laravel.com/docs/starter-kits#react",
+        title: 'Documentation',
+        href: 'https://laravel.com/docs/starter-kits#react',
         icon: BookOpen,
     },
 ];

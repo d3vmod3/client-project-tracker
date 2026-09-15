@@ -1,10 +1,10 @@
-import { Head, Link } from "@inertiajs/react";
-import { FormEvent, useEffect, useState } from "react";
-import { toast } from "sonner";
+import { Head, Link } from '@inertiajs/react';
+import { FormEvent, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-type ProjectStatus = "planning" | "in_progress" | "on_hold" | "completed";
+type ProjectStatus = 'planning' | 'in_progress' | 'on_hold' | 'completed';
 
-type ProjectPriority = "low" | "medium" | "high";
+type ProjectPriority = 'low' | 'medium' | 'high';
 
 type Project = {
     id: number;
@@ -31,13 +31,13 @@ export default function Edit() {
     const [projectId, setProjectId] = useState<string | null>(null);
 
     const [form, setForm] = useState<FormData>({
-        clientName: "",
-        projectName: "",
-        description: "",
-        status: "planning",
-        priority: "medium",
-        startDate: "",
-        dueDate: "",
+        clientName: '',
+        projectName: '',
+        description: '',
+        status: 'planning',
+        priority: 'medium',
+        startDate: '',
+        dueDate: '',
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -45,21 +45,21 @@ export default function Edit() {
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        const pathParts = window.location.pathname.split("/");
+        const pathParts = window.location.pathname.split('/');
         const id = pathParts[pathParts.length - 2];
 
         setProjectId(id);
 
         fetch(`/api/projects/${id}`, {
             headers: {
-                Accept: "application/json",
+                Accept: 'application/json',
             },
         })
             .then(async (response) => {
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.message || "Failed to load project.");
+                    throw new Error(data.message || 'Failed to load project.');
                 }
 
                 return data;
@@ -70,7 +70,7 @@ export default function Edit() {
                 setForm({
                     clientName: project.clientName,
                     projectName: project.projectName,
-                    description: project.description ?? "",
+                    description: project.description ?? '',
                     status: project.status,
                     priority: project.priority,
                     startDate: project.startDate,
@@ -78,11 +78,11 @@ export default function Edit() {
                 });
             })
             .catch((error) => {
-                console.error("Failed to load project:", error);
+                console.error('Failed to load project:', error);
 
-                toast.error("Failed to load project.", {
+                toast.error('Failed to load project.', {
                     duration: 3000,
-                    position: "top-center",
+                    position: 'top-center',
                 });
             })
             .finally(() => {
@@ -94,32 +94,32 @@ export default function Edit() {
         const newErrors: Record<string, string> = {};
 
         if (!form.clientName.trim()) {
-            newErrors.clientName = "Client name is required.";
+            newErrors.clientName = 'Client name is required.';
         }
 
         if (!form.projectName.trim()) {
-            newErrors.projectName = "Project name is required.";
+            newErrors.projectName = 'Project name is required.';
         }
 
         if (!form.status) {
-            newErrors.status = "Status is required.";
+            newErrors.status = 'Status is required.';
         }
 
         if (!form.priority) {
-            newErrors.priority = "Priority is required.";
+            newErrors.priority = 'Priority is required.';
         }
 
         if (!form.startDate) {
-            newErrors.startDate = "Start date is required.";
+            newErrors.startDate = 'Start date is required.';
         }
 
         if (!form.dueDate) {
-            newErrors.dueDate = "Due date is required.";
+            newErrors.dueDate = 'Due date is required.';
         }
 
         if (form.startDate && form.dueDate && form.dueDate < form.startDate) {
             newErrors.dueDate =
-                "Due date cannot be earlier than the start date.";
+                'Due date cannot be earlier than the start date.';
         }
 
         setErrors(newErrors);
@@ -135,7 +135,7 @@ export default function Edit() {
 
         setErrors((current) => ({
             ...current,
-            [field]: "",
+            [field]: '',
         }));
     };
 
@@ -150,10 +150,10 @@ export default function Edit() {
 
         try {
             const response = await fetch(`/api/projects/${projectId}`, {
-                method: "PUT",
+                method: 'PUT',
                 headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
                 },
                 body: JSON.stringify({
                     client_name: form.clientName,
@@ -175,10 +175,10 @@ export default function Edit() {
                     Object.entries(data.errors ?? {}).forEach(
                         ([field, messages]) => {
                             const frontendField = field
-                                .replace("client_name", "clientName")
-                                .replace("project_name", "projectName")
-                                .replace("start_date", "startDate")
-                                .replace("due_date", "dueDate");
+                                .replace('client_name', 'clientName')
+                                .replace('project_name', 'projectName')
+                                .replace('start_date', 'startDate')
+                                .replace('due_date', 'dueDate');
 
                             validationErrors[frontendField] = (
                                 messages as string[]
@@ -190,23 +190,23 @@ export default function Edit() {
                     return;
                 }
 
-                throw new Error(data.message || "Failed to update project.");
+                throw new Error(data.message || 'Failed to update project.');
             }
 
-            toast.success("Project updated successfully!", {
+            toast.success('Project updated successfully!', {
                 duration: 3000,
-                position: "top-center",
+                position: 'top-center',
             });
 
             setTimeout(() => {
-                window.location.href = "/projects";
+                window.location.href = '/projects';
             }, 1000);
         } catch (error) {
-            console.error("Failed to update project:", error);
+            console.error('Failed to update project:', error);
 
-            toast.error("Failed to update project!", {
+            toast.error('Failed to update project!', {
                 duration: 3000,
-                position: "top-center",
+                position: 'top-center',
             });
         } finally {
             setSubmitting(false);
@@ -219,7 +219,7 @@ export default function Edit() {
                 <Head title="Edit Project" />
 
                 <div className="p-6">
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                         Loading project...
                     </p>
                 </div>
@@ -235,7 +235,7 @@ export default function Edit() {
                 <div className="mb-6">
                     <h1 className="text-2xl font-semibold">Edit Project</h1>
 
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                         Update the client project details.
                     </p>
                 </div>
@@ -255,14 +255,14 @@ export default function Edit() {
                             type="text"
                             value={form.clientName}
                             onChange={(event) =>
-                                handleChange("clientName", event.target.value)
+                                handleChange('clientName', event.target.value)
                             }
                             className="w-full rounded-md border px-3 py-2 text-sm"
                             placeholder="Enter client name"
                         />
 
                         {errors.clientName && (
-                            <p className="text-sm text-destructive">
+                            <p className="text-destructive text-sm">
                                 {errors.clientName}
                             </p>
                         )}
@@ -282,14 +282,14 @@ export default function Edit() {
                             type="text"
                             value={form.projectName}
                             onChange={(event) =>
-                                handleChange("projectName", event.target.value)
+                                handleChange('projectName', event.target.value)
                             }
                             className="w-full rounded-md border px-3 py-2 text-sm"
                             placeholder="Enter project name"
                         />
 
                         {errors.projectName && (
-                            <p className="text-sm text-destructive">
+                            <p className="text-destructive text-sm">
                                 {errors.projectName}
                             </p>
                         )}
@@ -308,14 +308,14 @@ export default function Edit() {
                             id="description"
                             value={form.description}
                             onChange={(event) =>
-                                handleChange("description", event.target.value)
+                                handleChange('description', event.target.value)
                             }
                             className="min-h-32 w-full rounded-md border px-3 py-2 text-sm"
                             placeholder="Enter project description"
                         />
 
                         {errors.description && (
-                            <p className="text-sm text-destructive">
+                            <p className="text-destructive text-sm">
                                 {errors.description}
                             </p>
                         )}
@@ -335,7 +335,7 @@ export default function Edit() {
                                 id="status"
                                 value={form.status}
                                 onChange={(event) =>
-                                    handleChange("status", event.target.value)
+                                    handleChange('status', event.target.value)
                                 }
                                 className="w-full rounded-md border px-3 py-2 text-sm"
                             >
@@ -346,7 +346,7 @@ export default function Edit() {
                             </select>
 
                             {errors.status && (
-                                <p className="text-sm text-destructive">
+                                <p className="text-destructive text-sm">
                                     {errors.status}
                                 </p>
                             )}
@@ -364,7 +364,7 @@ export default function Edit() {
                                 id="priority"
                                 value={form.priority}
                                 onChange={(event) =>
-                                    handleChange("priority", event.target.value)
+                                    handleChange('priority', event.target.value)
                                 }
                                 className="w-full rounded-md border px-3 py-2 text-sm"
                             >
@@ -374,7 +374,7 @@ export default function Edit() {
                             </select>
 
                             {errors.priority && (
-                                <p className="text-sm text-destructive">
+                                <p className="text-destructive text-sm">
                                     {errors.priority}
                                 </p>
                             )}
@@ -397,7 +397,7 @@ export default function Edit() {
                                 value={form.startDate}
                                 onChange={(event) =>
                                     handleChange(
-                                        "startDate",
+                                        'startDate',
                                         event.target.value,
                                     )
                                 }
@@ -405,7 +405,7 @@ export default function Edit() {
                             />
 
                             {errors.startDate && (
-                                <p className="text-sm text-destructive">
+                                <p className="text-destructive text-sm">
                                     {errors.startDate}
                                 </p>
                             )}
@@ -424,13 +424,13 @@ export default function Edit() {
                                 type="date"
                                 value={form.dueDate}
                                 onChange={(event) =>
-                                    handleChange("dueDate", event.target.value)
+                                    handleChange('dueDate', event.target.value)
                                 }
                                 className="w-full rounded-md border px-3 py-2 text-sm"
                             />
 
                             {errors.dueDate && (
-                                <p className="text-sm text-destructive">
+                                <p className="text-destructive text-sm">
                                     {errors.dueDate}
                                 </p>
                             )}
@@ -449,9 +449,9 @@ export default function Edit() {
                         <button
                             type="submit"
                             disabled={submitting}
-                            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                            {submitting ? "Updating..." : "Update Project"}
+                            {submitting ? 'Updating...' : 'Update Project'}
                         </button>
                     </div>
                 </form>
