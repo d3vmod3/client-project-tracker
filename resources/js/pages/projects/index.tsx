@@ -176,22 +176,25 @@ export default function Index() {
                                     >
                                         <td className="group px-4 py-3 flex items-center justify-between">
                                             {project.projectName}
-
-                                            <Link
-                                                href={`/projects/${project.id}/edit`}
-                                                className="opacity-0 transition-opacity group-hover:opacity-100"
-                                            >
-                                                <EditIcon size="16" />
-                                            </Link>
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    setProjectToDelete(project)
-                                                }
-                                                className="text-destructive"
-                                            >
-                                                <TrashIcon size="16" />
-                                            </button>
+                                            <div className="flex items-center space-x-4">
+                                                <Link
+                                                    href={`/projects/${project.id}/edit`}
+                                                    className="opacity-0 transition-opacity group-hover:opacity-100"
+                                                >
+                                                    <EditIcon size="16" />
+                                                </Link>
+                                                <button
+                                                    type="button"
+                                                    className="opacity-0 transition-opacity group-hover:opacity-100 text-destructive cursor-pointer"
+                                                    onClick={() =>
+                                                        setProjectToDelete(
+                                                            project,
+                                                        )
+                                                    }
+                                                >
+                                                    <TrashIcon size="16" />
+                                                </button>
+                                            </div>
                                         </td>
                                         <td className="px-4 py-3">
                                             {project.clientName}

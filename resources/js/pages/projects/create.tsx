@@ -1,95 +1,13 @@
 import { Head, Link } from "@inertiajs/react";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 
 type ProjectStatus = "planning" | "in_progress" | "on_hold" | "completed";
-
 type ProjectPriority = "low" | "medium" | "high";
 
-type Project = {
-    id: number;
-    clientName: string;
-    projectName: string;
-    description: string | null;
-    status: ProjectStatus;
-    priority: ProjectPriority;
-    startDate: string;
-    dueDate: string;
-};
-
-type FormData = {
-    clientName: string;
-    projectName: string;
-    description: string;
-    status: ProjectStatus;
-    priority: ProjectPriority;
-    startDate: string;
-    dueDate: string;
-};
-
-export default function Edit() {
-    const [projectId, setProjectId] = useState<string | null>(null);
-
-    const [form, setForm] = useState<FormData>({
-        clientName: "",
-        projectName: "",
-        description: "",
-        status: "planning",
-        priority: "medium",
-        startDate: "",
-        dueDate: "",
-    });
-
+export default function Create() {
     const [errors, setErrors] = useState<Record<string, string>>({});
-    const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
-
-    useEffect(() => {
-        const pathParts = window.location.pathname.split("/");
-        const id = pathParts[pathParts.length - 2];
-
-        setProjectId(id);
-
-        fetch(`/api/projects/${id}`, {
-            headers: {
-                Accept: "application/json",
-            },
-        })
-            .then(async (response) => {
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.message || "Failed to load project.");
-                }
-
-                return data;
-            })
-            .then((data) => {
-                const project: Project = data.data;
-
-                setForm({
-                    clientName: project.clientName,
-                    projectName: project.projectName,
-                    description: project.description ?? "",
-                    status: project.status,
-                    priority: project.priority,
-                    startDate: project.startDate,
-                    dueDate: project.dueDate,
-                });
-            })
-            .catch((error) => {
-                console.error("Failed to load project:", error);
-
-                toast.error("Failed to load project.", {
-                    duration: 3000,
-                    position: "top-center",
-                });
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, []);
-
     const validate = () => {
         const newErrors: Record<string, string> = {};
 
@@ -126,31 +44,33 @@ export default function Edit() {
 
         return Object.keys(newErrors).length === 0;
     };
+    const [form, setForm] = useState({
+        clientName: "",
+        projectName: "",
+        description: "",
+        status: "planning" as ProjectStatus,
+        priority: "medium" as ProjectPriority,
+        startDate: "",
+        dueDate: "",
+    });
 
-    const handleChange = (field: keyof FormData, value: string) => {
+    const handleChange = (field: keyof typeof form, value: string) => {
         setForm((current) => ({
             ...current,
             [field]: value,
-        }));
-
-        setErrors((current) => ({
-            ...current,
-            [field]: "",
         }));
     };
 
     const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-
-        if (!validate() || !projectId) {
+        if (!validate()) {
             return;
         }
-
         setSubmitting(true);
-
+        console.log(form);
         try {
-            const response = await fetch(`/api/projects/${projectId}`, {
-                method: "PUT",
+            const response = await fetch("/api/projects", {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Accept: "application/json",
@@ -174,15 +94,7 @@ export default function Edit() {
 
                     Object.entries(data.errors ?? {}).forEach(
                         ([field, messages]) => {
-                            const frontendField = field
-                                .replace("client_name", "clientName")
-                                .replace("project_name", "projectName")
-                                .replace("start_date", "startDate")
-                                .replace("due_date", "dueDate");
-
-                            validationErrors[frontendField] = (
-                                messages as string[]
-                            )[0];
+                            validationErrors[field] = (messages as string[])[0];
                         },
                     );
 
@@ -190,21 +102,28 @@ export default function Edit() {
                     return;
                 }
 
-                throw new Error(data.message || "Failed to update project.");
+                throw new Error(data.message || "Failed to create project.");
             }
 
-            toast.success("Project updated successfully!", {
+            toast.success("Action completed successfully!", {
                 duration: 3000,
                 position: "top-center",
             });
 
-            setTimeout(() => {
-                window.location.href = "/projects";
-            }, 1000);
-        } catch (error) {
-            console.error("Failed to update project:", error);
+            setForm({
+                clientName: "",
+                projectName: "",
+                description: "",
+                status: "planning",
+                priority: "medium",
+                startDate: "",
+                dueDate: "",
+            });
 
-            toast.error("Failed to update project!", {
+            setErrors({});
+        } catch (error) {
+            console.error("Failed to create project:", error);
+            toast.error("Failed to create project!", {
                 duration: 3000,
                 position: "top-center",
             });
@@ -213,30 +132,16 @@ export default function Edit() {
         }
     };
 
-    if (loading) {
-        return (
-            <>
-                <Head title="Edit Project" />
-
-                <div className="p-6">
-                    <p className="text-sm text-muted-foreground">
-                        Loading project...
-                    </p>
-                </div>
-            </>
-        );
-    }
-
     return (
         <>
-            <Head title="Edit Project" />
+            <Head title="Add Project" />
 
             <div className="p-6">
                 <div className="mb-6">
-                    <h1 className="text-2xl font-semibold">Edit Project</h1>
+                    <h1 className="text-2xl font-semibold">Add Project</h1>
 
                     <p className="text-sm text-muted-foreground">
-                        Update the client project details.
+                        Create a new client project.
                     </p>
                 </div>
 
@@ -260,7 +165,6 @@ export default function Edit() {
                             className="w-full rounded-md border px-3 py-2 text-sm"
                             placeholder="Enter client name"
                         />
-
                         {errors.clientName && (
                             <p className="text-sm text-destructive">
                                 {errors.clientName}
@@ -287,7 +191,6 @@ export default function Edit() {
                             className="w-full rounded-md border px-3 py-2 text-sm"
                             placeholder="Enter project name"
                         />
-
                         {errors.projectName && (
                             <p className="text-sm text-destructive">
                                 {errors.projectName}
@@ -313,7 +216,6 @@ export default function Edit() {
                             className="min-h-32 w-full rounded-md border px-3 py-2 text-sm"
                             placeholder="Enter project description"
                         />
-
                         {errors.description && (
                             <p className="text-sm text-destructive">
                                 {errors.description}
@@ -340,11 +242,13 @@ export default function Edit() {
                                 className="w-full rounded-md border px-3 py-2 text-sm"
                             >
                                 <option value="planning">Planning</option>
+
                                 <option value="in_progress">In Progress</option>
+
                                 <option value="on_hold">On Hold</option>
+
                                 <option value="completed">Completed</option>
                             </select>
-
                             {errors.status && (
                                 <p className="text-sm text-destructive">
                                     {errors.status}
@@ -372,7 +276,6 @@ export default function Edit() {
                                 <option value="medium">Medium</option>
                                 <option value="high">High</option>
                             </select>
-
                             {errors.priority && (
                                 <p className="text-sm text-destructive">
                                     {errors.priority}
@@ -403,7 +306,6 @@ export default function Edit() {
                                 }
                                 className="w-full rounded-md border px-3 py-2 text-sm"
                             />
-
                             {errors.startDate && (
                                 <p className="text-sm text-destructive">
                                     {errors.startDate}
@@ -428,7 +330,6 @@ export default function Edit() {
                                 }
                                 className="w-full rounded-md border px-3 py-2 text-sm"
                             />
-
                             {errors.dueDate && (
                                 <p className="text-sm text-destructive">
                                     {errors.dueDate}
@@ -448,10 +349,9 @@ export default function Edit() {
 
                         <button
                             type="submit"
-                            disabled={submitting}
-                            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
                         >
-                            {submitting ? "Updating..." : "Update Project"}
+                            Create Project
                         </button>
                     </div>
                 </form>
