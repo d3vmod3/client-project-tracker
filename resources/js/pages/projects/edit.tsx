@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 type ProjectStatus = 'planning' | 'in_progress' | 'on_hold' | 'completed';

@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 type ProjectStatus = 'planning' | 'in_progress' | 'on_hold' | 'completed';
@@ -128,7 +128,7 @@ export default function Create() {
                 position: 'top-center',
             });
         } finally {
-            setSubmitting(false);
+            if (submitting) setSubmitting(false);
         }
     };
 
