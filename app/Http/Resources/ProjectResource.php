@@ -14,15 +14,18 @@ class ProjectResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
+        $project = $this->resource;
+
         return [
-            'id' => $this->id,
-            'clientName' => $this->client_name,
-            'projectName' => $this->project_name,
-            'description' => $this->description,
-            'status' => $this->status->value,
-            'priority' => $this->priority->value,
-            'startDate' => $this->start_date?->format('Y-m-d'),
-            'dueDate' => $this->due_date?->format('Y-m-d'),
+            'id' => $project->id,
+            'clientName' => $project->client_name,
+            'projectName' => $project->project_name,
+            'description' => $project->description,
+            'status' => $project->status->value,
+            'priority' => $project->priority->value,
+            'startDate' => $project->start_date?->format('Y-m-d'),
+            'dueDate' => $project->due_date?->format('Y-m-d'),
         ];
     }
 }

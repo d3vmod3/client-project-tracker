@@ -7,7 +7,7 @@ Route::inertia('/', 'welcome')->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 
-    //Projects Page
+    // Projects Page
     Route::get('/projects', function () {
         return inertia('projects/index');
     })->name('projects.index');

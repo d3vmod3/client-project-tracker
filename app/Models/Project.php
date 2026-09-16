@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Enums\ProjectPriority;
 use App\Enums\ProjectStatus;
+use Database\Factories\ProjectFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProjectFactory> */
+    /** @use HasFactory<ProjectFactory> */
     use HasFactory;
+
     protected $fillable = [
         'client_name',
         'project_name',
@@ -30,5 +32,4 @@ class Project extends Model
             'due_date' => 'date',
         ];
     }
-
 }
