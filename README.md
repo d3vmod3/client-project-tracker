@@ -272,3 +272,11 @@ php artisan optimize:clear
 ## License
 
 This project was created for development/assessment purposes.
+
+Assumptions Made:
+
+- A client can have multiple projects.
+- Start date and due date are required.
+- Due date cannot be earlier than the start date.
+- Project deletion is permanent and requires confirmation.
+- Authentication and pagination are not required for the core assessment.
